@@ -1,0 +1,25 @@
+<svg width="640" height="420" viewBox="0 0 640 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="420" rx="32" fill="#081120"/>
+  <circle cx="320" cy="210" r="118" stroke="#334155" stroke-width="2"/>
+  <circle cx="320" cy="210" r="76" stroke="#1E293B" stroke-width="2" stroke-dasharray="10 12"/>
+  <circle cx="320" cy="210" r="44" fill="url(#g1)"/>
+  <circle cx="320" cy="92" r="32" fill="#0F172A" stroke="#FBBF24" stroke-width="3"/>
+  <circle cx="438" cy="210" r="32" fill="#0F172A" stroke="#38BDF8" stroke-width="3"/>
+  <circle cx="320" cy="328" r="32" fill="#0F172A" stroke="#86EFAC" stroke-width="3"/>
+  <circle cx="202" cy="210" r="32" fill="#0F172A" stroke="#F8FAFC" stroke-width="3"/>
+  <text x="303" y="216" fill="#0F172A" font-family="Georgia, serif" font-size="22">C</text>
+  <text x="304" y="99" fill="#FDE68A" font-family="Segoe UI, sans-serif" font-size="16">ID</text>
+  <text x="421" y="217" fill="#BAE6FD" font-family="Segoe UI, sans-serif" font-size="16">TX</text>
+  <text x="296" y="335" fill="#BBF7D0" font-family="Segoe UI, sans-serif" font-size="16">KYC</text>
+  <text x="184" y="217" fill="#E2E8F0" font-family="Segoe UI, sans-serif" font-size="15">VIP</text>
+  <path d="M320 124V178" stroke="#FBBF24" stroke-width="3" stroke-linecap="round"/>
+  <path d="M406 210H352" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"/>
+  <path d="M320 296V242" stroke="#86EFAC" stroke-width="3" stroke-linecap="round"/>
+  <path d="M234 210H288" stroke="#F8FAFC" stroke-width="3" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="g1" x1="276" y1="166" x2="364" y2="254" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FDE68A"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+  </defs>
+</svg>

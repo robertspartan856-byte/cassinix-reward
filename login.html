@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cassinix Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="auth-container">
+  <div class="auth-box">
+    <div class="brand-lockup auth-brand-lockup">
+      <img src="assets/cassinix-logo.png" alt="Cassinix logo" class="brand-logo">
+      <p class="brand-eyebrow">Cassinix</p>
+    </div>
+    <h2>Sign In to Cassinix</h2>
+
+    <input id="email" type="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
+    <p id="statusMessage" class="status-message"></p>
+    <div class="auth-link-stack auth-actions-stack">
+      <button id="resendVerificationButton" type="button" onclick="resendVerification()" class="btn btn-secondary">Resend verification email</button>
+      <a id="verificationDebugLink" href="#" target="_blank" rel="noreferrer" hidden>Open local verification link</a>
+    </div>
+
+    <button id="loginButton" onclick="login()" class="btn">Login</button>
+    <p><a href="register.html">Need an account? Register</a></p>
+  </div>
+</div>
+
+<script>
+const API = window.location.protocol === "file:" ? "http://localhost:5000" : window.location.origin;
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const statusMessage = document.getElementById("statusMessage");
+const loginButton = document.getElementById("loginButton");
+const resendVerificationButton = document.getElementById("resendVerificationButton");
+const verificationDebugLink = document.getElementById("verificationDebugLink");
+const params = new URLSearchParams(window.location.search);
+
+function setStatus(message, isError = true) {
+  statusMessage.textContent = message;
+  statusMessage.className = isError ? "status-message error" : "status-message success";
+}
+
+function setVerificationDebugLink(url) {
+  if (!url) {
+    verificationDebugLink.hidden = true;
+    verificationDebugLink.removeAttribute("href");
+    return;
+  }
+
+  verificationDebugLink.href = url;
+  verificationDebugLink.hidden = false;
+}
+
+function applyQueryState() {
+  const email = params.get("email");
+  const verified = params.get("verified");
+  const already = params.get("already");
+  const reason = params.get("reason");
+
+  if (email) {
+    emailInput.value = email;
+  }
+
+  if (params.get("pendingVerification") === "1") {
+    setStatus("Account created. Check your inbox and verify your email before signing in.", false);
+  }
+
+  if (verified === "1") {
+    setStatus(already === "1" ? "This email is already verified. You can sign in now." : "Email verified. You can sign in now.", false);
+  }
+
+  if (verified === "0") {
+    if (reason === "expired") {
+      setStatus("That verification link expired. Request a new one below.");
+    } else {
+      setStatus("That verification link is invalid. Request a new one below.");
+    }
+  }
+}
+
+async function login() {
+  const emailValue = emailInput.value.trim();
+  const passwordValue = passwordInput.value;
+
+  setVerificationDebugLink(null);
+
+  if (!emailValue || !passwordValue) {
+    setStatus("Enter both email and password.");
+    return;
+  }
+
+  loginButton.disabled = true;
+  setStatus("Signing in...", false);
+
+  try {
+    const res = await fetch(API + "/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: emailValue,
+        password: passwordValue
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.token) {
+      if (data && data.requiresVerification) {
+        setStatus(data.message || "Verify your email before logging in.");
+        return;
+      }
+
+      setStatus(data.message || "Login failed.");
+      return;
+    }
+
+    localStorage.setItem("token", data.token);
+
+    const profileRes = await fetch(API + "/me", {
+      headers: {
+        Authorization: "Bearer " + data.token
+      }
+    });
+
+    let profile = null;
+    try {
+      profile = await profileRes.json();
+    } catch (error) {
+      profile = null;
+    }
+
+    if (!profileRes.ok || !profile) {
+      localStorage.removeItem("token");
+      setStatus((profile && profile.message) || "Login succeeded, but your profile could not be loaded.");
+      return;
+    }
+
+    setStatus("Login successful. Redirecting...", false);
+    window.location.href = profile.role === "admin" ? "admin.html" : "dashboard.html";
+  } catch (error) {
+    setStatus("Unable to reach the server.");
+  } finally {
+    loginButton.disabled = false;
+  }
+}
+
+async function resendVerification() {
+  const emailValue = emailInput.value.trim();
+
+  if (!emailValue) {
+    setStatus("Enter your email address first.");
+    return;
+  }
+
+  resendVerificationButton.disabled = true;
+  setVerificationDebugLink(null);
+  setStatus("Sending verification email...", false);
+
+  try {
+    const res = await fetch(API + "/verification/resend", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: emailValue })
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      setStatus(data.message || "Unable to resend verification email.");
+      return;
+    }
+
+    setVerificationDebugLink(data.debugVerificationUrl || null);
+    setStatus(data.message || "Verification email sent.", false);
+  } catch (error) {
+    setStatus("Unable to reach the server.");
+  } finally {
+    resendVerificationButton.disabled = false;
+  }
+}
+
+applyQueryState();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<svg width="720" height="540" viewBox="0 0 720 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="720" height="540" rx="36" fill="url(#bg)"/>
+  <circle cx="532" cy="154" r="88" fill="url(#coin)" fill-opacity="0.95"/>
+  <circle cx="186" cy="380" r="64" fill="#0F172A" stroke="#38BDF8" stroke-width="2"/>
+  <circle cx="186" cy="380" r="44" fill="#081120" stroke="#FBBF24" stroke-width="2" stroke-dasharray="8 10"/>
+  <path d="M186 318C258 250 334 228 420 238C491 247 550 212 580 160" stroke="url(#line)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M186 442C252 470 336 466 418 408C469 372 522 336 566 314" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" stroke-dasharray="10 10"/>
+  <rect x="264" y="164" width="180" height="118" rx="22" fill="#0F172A" stroke="#334155"/>
+  <text x="294" y="205" fill="#94A3B8" font-family="Segoe UI, sans-serif" font-size="16" letter-spacing="2">CRYPTOVA</text>
+  <text x="294" y="242" fill="#F8FAFC" font-family="Georgia, serif" font-size="28">Wallet + ID + Proof</text>
+  <text x="294" y="270" fill="#CBD5E1" font-family="Segoe UI, sans-serif" font-size="15">Verified identities</text>
+  <text x="294" y="292" fill="#CBD5E1" font-family="Segoe UI, sans-serif" font-size="15">Auditable reward history</text>
+  <circle cx="314" cy="355" r="10" fill="#FBBF24"/>
+  <circle cx="438" cy="390" r="10" fill="#38BDF8"/>
+  <circle cx="582" cy="314" r="10" fill="#F8FAFC"/>
+  <defs>
+    <linearGradient id="bg" x1="66" y1="40" x2="644" y2="498" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#030712"/>
+    </linearGradient>
+    <linearGradient id="coin" x1="470" y1="86" x2="596" y2="240" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FDE68A"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="line" x1="186" y1="318" x2="580" y2="160" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FBBF24"/>
+      <stop offset="1" stop-color="#38BDF8"/>
+    </linearGradient>
+  </defs>
+</svg>

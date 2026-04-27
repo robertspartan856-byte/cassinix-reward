@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cassinix Register</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="auth-container">
+  <div class="auth-box">
+    <div class="brand-lockup auth-brand-lockup">
+      <img src="assets/cassinix-logo.png" alt="Cassinix logo" class="brand-logo">
+      <p class="brand-eyebrow">Cassinix</p>
+    </div>
+    <h2>Join Cassinix</h2>
+
+    <input id="name" placeholder="Name">
+    <input id="email" type="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
+    <input id="referralCode" placeholder="Referral code (optional)">
+
+    <select id="tier">
+      <option value="basic">Basic</option>
+      <option value="vip">VIP</option>
+      <option value="pro">Pro</option>
+      <option value="elite">Elite</option>
+    </select>
+
+    <p id="statusMessage" class="status-message"></p>
+    <div id="postRegisterActions" class="auth-link-stack" hidden>
+      <a id="verificationDebugLink" href="#" target="_blank" rel="noreferrer" hidden>Open local verification link</a>
+      <a id="loginRedirectLink" href="login.html">Continue to login</a>
+    </div>
+    <button id="registerButton" onclick="register()" class="btn">Register</button>
+    <p><a href="login.html">Already have an account? Login</a></p>
+  </div>
+</div>
+
+<script>
+const API = window.location.protocol === "file:" ? "http://localhost:5000" : window.location.origin;
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const referralCodeInput = document.getElementById("referralCode");
+const tierSelect = document.getElementById("tier");
+const params = new URLSearchParams(window.location.search);
+const statusMessage = document.getElementById("statusMessage");
+const registerButton = document.getElementById("registerButton");
+const postRegisterActions = document.getElementById("postRegisterActions");
+const verificationDebugLink = document.getElementById("verificationDebugLink");
+const loginRedirectLink = document.getElementById("loginRedirectLink");
+
+if (params.has("ref")) {
+  referralCodeInput.value = params.get("ref");
+}
+
+function setStatus(message, isError = true) {
+  statusMessage.textContent = message;
+  statusMessage.className = isError ? "status-message error" : "status-message success";
+}
+
+function hidePostRegisterActions() {
+  postRegisterActions.hidden = true;
+  verificationDebugLink.hidden = true;
+  verificationDebugLink.removeAttribute("href");
+  loginRedirectLink.href = "login.html";
+}
+
+async function register() {
+  const emailValue = emailInput.value.trim();
+  const passwordValue = passwordInput.value;
+  const payload = {
+    name: nameInput.value.trim(),
+    email: emailValue,
+    password: passwordValue,
+    tier: tierSelect.value,
+    referralCode: referralCodeInput.value.trim() || undefined
+  };
+
+  if (!payload.name || !payload.email || !payload.password) {
+    setStatus("Name, email, and password are required.");
+    return;
+  }
+
+  registerButton.disabled = true;
+  setStatus("Creating account...", false);
+  hidePostRegisterActions();
+
+  try {
+    const res = await fetch(API + "/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setStatus(data.message || "Registration failed.");
+      return;
+    }
+
+    loginRedirectLink.href = `login.html?pendingVerification=1&email=${encodeURIComponent(emailValue)}`;
+    if (data.debugVerificationUrl) {
+      verificationDebugLink.href = data.debugVerificationUrl;
+      verificationDebugLink.hidden = false;
+    }
+    postRegisterActions.hidden = false;
+    setStatus(data.message || "Account created. Verify your email before logging in.", false);
+  } catch (error) {
+    setStatus("Unable to reach the server.");
+  } finally {
+    registerButton.disabled = false;
+  }
+}
+
+hidePostRegisterActions();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+<svg width="640" height="420" viewBox="0 0 640 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="420" rx="32" fill="#0B1423"/>
+  <path d="M320 70L432 114V206C432 267 389 323 320 350C251 323 208 267 208 206V114L320 70Z" fill="#0F172A" stroke="#38BDF8" stroke-width="4"/>
+  <path d="M320 124L387 150V204C387 242 360 277 320 298C280 277 253 242 253 204V150L320 124Z" fill="url(#g1)"/>
+  <circle cx="320" cy="191" r="28" fill="#0F172A"/>
+  <path d="M320 167V214" stroke="#F8FAFC" stroke-width="8" stroke-linecap="round"/>
+  <path d="M297 192H343" stroke="#F8FAFC" stroke-width="8" stroke-linecap="round"/>
+  <rect x="92" y="126" width="94" height="94" rx="22" fill="#111827" stroke="#334155"/>
+  <text x="119" y="181" fill="#FBBF24" font-family="Georgia, serif" font-size="30">ID</text>
+  <rect x="454" y="126" width="94" height="94" rx="22" fill="#111827" stroke="#334155"/>
+  <text x="477" y="181" fill="#38BDF8" font-family="Georgia, serif" font-size="28">TX</text>
+  <path d="M186 174H242" stroke="#38BDF8" stroke-width="3" stroke-dasharray="8 8"/>
+  <path d="M398 174H454" stroke="#FBBF24" stroke-width="3" stroke-dasharray="8 8"/>
+  <defs>
+    <linearGradient id="g1" x1="253" y1="124" x2="387" y2="298" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FBBF24"/>
+      <stop offset="1" stop-color="#38BDF8"/>
+    </linearGradient>
+  </defs>
+</svg>

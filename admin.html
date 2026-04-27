@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cassinix Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard-page admin-page">
+  <div class="admin-shell">
+    <aside class="dashboard-sidebar admin-sidebar">
+      <div>
+        <div class="brand-lockup sidebar-brand-lockup">
+          <img src="assets/cassinix-logo.png" alt="Cassinix logo" class="brand-logo sidebar-brand-logo">
+          <p class="brand-eyebrow">Cassinix</p>
+        </div>
+        <p class="dashboard-kicker">Cassinix operations</p>
+        <h2>Cassinix Admin</h2>
+        <p class="dashboard-sidebar-copy">Monitor users, approve compliance requests, record payouts, and inspect fairness proof data across Cassinix.</p>
+      </div>
+
+      <nav class="dashboard-nav">
+        <a href="#adminOverview">Overview</a>
+        <a href="#adminUsers">Users</a>
+        <a href="#adminKyc">KYC</a>
+        <a href="#adminRewards">Rewards</a>
+        <a href="#adminSupport">Support</a>
+        <a href="#adminFairness">Fairness</a>
+      </nav>
+
+      <div class="dashboard-sidebar-card">
+        <p class="dashboard-card-label">Admin session</p>
+        <strong id="adminSidebarRole">Loading...</strong>
+        <span id="adminSidebarIdentity">Checking access</span>
+      </div>
+
+      <button onclick="logout()" class="btn dashboard-logout">Logout</button>
+    </aside>
+
+    <main class="dashboard-main">
+      <p id="adminStatus" class="status-message dashboard-toast">Checking admin access...</p>
+
+      <section id="adminOverview" class="dashboard-hero admin-hero">
+        <div class="dashboard-hero-copy">
+          <p class="dashboard-kicker">Admin overview</p>
+          <h1>Cassinix Control Panel</h1>
+          <p id="adminIdentity" class="dashboard-hero-meta">Loading admin profile...</p>
+
+          <div class="dashboard-actions">
+            <button onclick="loadAnalytics()" class="btn">Refresh Analytics</button>
+            <button onclick="pickWinner()" class="btn btn-secondary">Run Winner Draw</button>
+          </div>
+        </div>
+
+        <div class="dashboard-hero-panel">
+          <div class="dashboard-stat-card accent-card">
+            <p class="dashboard-card-label">Latest winner</p>
+            <strong id="winnerHeadline">No draw recorded</strong>
+            <span id="winnerProofHint">Run a draw to generate fairness proof data.</span>
+          </div>
+
+          <div class="dashboard-stat-grid admin-stat-grid">
+            <div class="dashboard-stat-card">
+              <p class="dashboard-card-label">Pending KYC</p>
+              <strong id="pendingKycValue">0</strong>
+              <span>Awaiting review</span>
+            </div>
+            <div class="dashboard-stat-card">
+              <p class="dashboard-card-label">Pending rewards</p>
+              <strong id="pendingRewardsValue">0</strong>
+              <span>Need payout confirmation</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-panel admin-chart-panel">
+        <div class="panel-heading-row">
+          <div>
+            <p class="dashboard-kicker">Analytics</p>
+            <h3>Platform Metrics</h3>
+          </div>
+        </div>
+        <div class="admin-chart-grid">
+          <div class="chart-card"><canvas id="usersChart" width="400" height="220"></canvas></div>
+          <div class="chart-card"><canvas id="entriesChart" width="400" height="220"></canvas></div>
+          <div class="chart-card"><canvas id="kycChart" width="400" height="220"></canvas></div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid admin-grid">
+        <section id="adminUsers" class="dashboard-panel">
+          <div class="panel-heading-row">
+            <div>
+              <p class="dashboard-kicker">Users</p>
+              <h3>Member Directory</h3>
+            </div>
+            <button onclick="loadUsers()" class="btn btn-secondary btn-small">Load Users</button>
+          </div>
+          <ul id="users" class="participants-grid"></ul>
+        </section>
+
+        <section id="adminKyc" class="dashboard-panel">
+          <div class="panel-heading-row">
+            <div>
+              <p class="dashboard-kicker">Compliance</p>
+              <h3>KYC Requests</h3>
+            </div>
+            <button onclick="loadKYC()" class="btn btn-secondary btn-small">Load KYC</button>
+          </div>
+          <ul id="kycList" class="activity-list"></ul>
+        </section>
+      </section>
+
+      <section class="dashboard-grid admin-grid">
+        <section id="adminRewards" class="dashboard-panel">
+          <div class="panel-heading-row">
+            <div>
+              <p class="dashboard-kicker">Rewards</p>
+              <h3>Payout Queue</h3>
+            </div>
+            <button onclick="loadRewardTransactions()" class="btn btn-secondary btn-small">Refresh Rewards</button>
+          </div>
+          <ul id="rewardTransactions" class="transaction-list"></ul>
+        </section>
+
+        <section id="adminFairness" class="dashboard-panel">
+          <div class="panel-heading-row">
+            <div>
+              <p class="dashboard-kicker">Fairness Proof</p>
+              <h3>Recorded Draws</h3>
+            </div>
+            <button onclick="loadFairnessProof()" class="btn btn-secondary btn-small">Refresh Proof</button>
+          </div>
+          <ul id="fairnessDraws" class="notice-list"></ul>
+        </section>
+      </section>
+
+      <section class="dashboard-panel" id="adminSupport">
+        <div class="panel-heading-row">
+          <div>
+            <p class="dashboard-kicker">Support</p>
+            <h3>Member Support Tickets</h3>
+          </div>
+          <button onclick="loadSupportTickets()" class="btn btn-secondary btn-small">Refresh Support</button>
+        </div>
+        <ul id="supportTickets" class="notice-list"></ul>
+      </section>
+    </main>
+  </div>
+  <script src="admin.js"></script>
+</body>
+</html>

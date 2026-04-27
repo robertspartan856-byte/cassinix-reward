@@ -1,0 +1,1296 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cassinix Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-page">
+  <div class="dashboard-shell">
+    <aside class="dashboard-sidebar">
+      <div>
+        <div class="brand-lockup sidebar-brand-lockup">
+          <img src="assets/cassinix-logo.png" alt="Cassinix logo" class="brand-logo sidebar-brand-logo">
+          <p class="brand-eyebrow">Cassinix</p>
+        </div>
+        <p class="dashboard-kicker">Cassinix member space</p>
+        <h2>Cassinix Hub</h2>
+        <p class="dashboard-sidebar-copy">Track your account, finish verification, and monitor how your entries stack up inside Cassinix.</p>
+      </div>
+
+      <nav class="dashboard-nav">
+        <a href="#overview">Overview</a>
+        <a href="#profile">Profile</a>
+        <a href="#rewards">Rewards</a>
+        <a href="#giveawayStatus">Giveaway</a>
+        <a href="#kyc">KYC</a>
+        <a href="#fairness">Fairness</a>
+        <a href="#support">Support</a>
+      </nav>
+
+      <div class="dashboard-sidebar-card">
+        <p class="dashboard-card-label">Account status</p>
+        <strong id="sidebarTier">Loading...</strong>
+        <span id="sidebarRole">Member access</span>
+      </div>
+
+      <button onclick="logout()" class="btn dashboard-logout">Logout</button>
+    </aside>
+
+    <main class="dashboard-main">
+      <p id="dashboardToast" class="status-message dashboard-toast"></p>
+
+      <section id="overview" class="dashboard-hero">
+        <div class="dashboard-hero-copy">
+          <p class="dashboard-kicker">Member overview</p>
+          <h1 id="heroGreeting">Welcome back</h1>
+          <p id="userInfo" class="dashboard-hero-meta">Loading...</p>
+
+          <div class="dashboard-actions">
+            <a href="#giveawayStatus" class="btn btn-secondary">View Giveaway Status</a>
+            <button onclick="loadParticipants()" class="btn">Refresh Leaderboard</button>
+          </div>
+        </div>
+
+        <div class="dashboard-hero-panel">
+          <div class="dashboard-stat-card accent-card">
+            <p class="dashboard-card-label">Current tier</p>
+            <strong id="tierValue">Loading...</strong>
+            <span id="entrySummary">Entries update after successful activity.</span>
+          </div>
+
+          <div class="dashboard-stat-grid">
+            <div class="dashboard-stat-card">
+              <p class="dashboard-card-label">Entries</p>
+              <strong id="entriesValue">0</strong>
+              <span>Active giveaway weight</span>
+            </div>
+            <div class="dashboard-stat-card">
+              <p class="dashboard-card-label">KYC status</p>
+              <strong id="kycHeadlineStatus">Awaiting review</strong>
+              <span id="kycHeadlineHint">No submission yet</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-overview-grid">
+        <section id="profile" class="dashboard-panel profile-panel">
+          <div class="panel-heading-row">
+            <div>
+              <p class="dashboard-kicker">Login & Profile</p>
+              <h3>Account Identity</h3>
+            </div>
+            <span class="status-pill neutral" id="profileSecurityBadge">Secure session</span>
+          </div>
+          <div class="profile-grid">
+            <div class="profile-field">
+              <span>Username</span>
+              <strong id="profileUsername">Loading...</strong>
+            </div>
+            <div class="profile-field">
+              <span>Email</span>
+              <strong id="profileEmail">Loading...</strong>
+            </div>
+            <div class="profile-field wide-field">
+              <span>Linked wallet</span>
+              <strong id="profileWallet">Not linked yet</strong>
+            </div>
+            <div class="profile-field">
+              <span>Access role</span>
+              <strong id="profileAccess">Member</strong>
+            </div>
+            <div class="profile-field">
+              <span>Linked sign-in</span>
+              <strong id="profileSignInMethod">Email login</strong>
+            </div>
+          </div>
+        </section>
+
+        <section id="rewards" class="dashboard-panel balance-panel">
+          <div class="panel-heading-row">
+            <div>
+              <p class="dashboard-kicker">Balance Overview</p>
+              <h3>Bitcoin Rewards</h3>
+            </div>
+            <span class="balance-caption">Transparent reward ledger</span>
+          </div>
+          <div class="balance-grid">
+            <div class="balance-card">
+              <span>Current balance</span>
+              <strong id="balanceValue">0.000000 BTC</strong>
+              <p>Confirmed payout total</p>
+            </div>
+            <div class="balance-card">
+              <span>Pending rewards</span>
+              <strong id="pendingRewardValue">0.000000 BTC</strong>
+              <p>Awaiting next distribution</p>
+            </div>
+            <div class="balance-card">
+              <span>Transaction count</span>
+              <strong id="transactionCountValue">0</strong>
+              <p>Reward events tracked</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="giveawayStatus" class="dashboard-panel giveaway-panel">
+          <div class="panel-heading-row">
+            <div>
+              <p class="dashboard-kicker">Giveaway Status</p>
+              <h3>Next Distribution Window</h3>
+            </div>
+            <span id="countdownTimer" class="countdown-chip">00:00:00</span>
+          </div>
+
+          <div class="giveaway-summary-grid">
+            <div class="giveaway-card">
+              <span>Entries earned</span>
+              <strong id="giveawayEntriesValue">0 tickets</strong>
+              <p id="entryGoalValue">0 out of 10 entries earned</p>
+            </div>
+            <div class="giveaway-card">
+              <span>Eligibility progress</span>
+              <strong id="milestoneStatus">Needs momentum</strong>
+              <p id="milestoneHint">Reach 10 entries to max out this milestone.</p>
+            </div>
+          </div>
+
+          <div class="progress-shell" aria-label="Eligibility progress bar">
+            <div id="entryProgressBar" class="progress-fill"></div>
+          </div>
+          <p id="progressText" class="progress-copy">0% milestone progress</p>
+
+          <div class="action-grid">
+            <button type="button" class="btn" onclick="claimDailyEntries()">Claim Daily Entries</button>
+            <button type="button" class="btn btn-secondary" onclick="completeTasks()">Complete Tasks</button>
+            <button type="button" class="btn btn-secondary" onclick="verifyWalletForPayout()">Verify Wallet for Payout</button>
+          </div>
+          <div class="wallet-entry-row">
+            <input type="text" id="walletAddressInput" class="wallet-inline-input" placeholder="Enter your Bitcoin payout address (bc1..., 1..., or 3...)">
+          </div>
+        </section>
+
+        <section class="dashboard-panel notifications-panel">
+          <div class="panel-heading-row">
+            <div>
+              <p class="dashboard-kicker">Notifications</p>
+              <h3>Live Alerts</h3>
+            </div>
+            <span id="notificationCount" class="status-pill neutral">0 alerts</span>
+          </div>
+          <ul id="notificationList" class="notice-list"></ul>
+        </section>
+      </section>
+
+      <section class="dashboard-grid">
+        <section class="dashboard-panel transaction-panel">
+          <div class="panel-heading-row">
+            <div>
+              <p class="dashboard-kicker">Transaction Log</p>
+              <h3>Reward Ledger</h3>
+            </div>
+            <span class="balance-caption">Blockchain-ready references</span>
+          </div>
+          <ul id="transactionList" class="transaction-list"></ul>
+        </section>
+
+        <section id="kyc" class="dashboard-panel kyc-panel">
+          <div class="panel-heading-row">
+            <div>
+              <p class="dashboard-kicker">Compliance</p>
+              <h3>KYC Verification</h3>
+            </div>
+            <span id="kycStatusBadge" class="status-pill neutral">No submission yet</span>
+          </div>
+          <p class="panel-copy">Submit a government-issued ID and a live selfie. Admin review confirms the ID looks original and the face matches the document.</p>
+
+          <div class="kyc-detail-grid">
+            <label class="kyc-field">
+              <span>ID type</span>
+              <select id="kycIdType">
+                <option value="">Select ID type</option>
+                <option value="Passport">Passport</option>
+                <option value="Driver License">Driver License</option>
+                <option value="National ID">National ID</option>
+                <option value="Voter Card">Voter Card</option>
+              </select>
+            </label>
+            <label class="kyc-field">
+              <span>ID number</span>
+              <input type="text" id="kycIdNumber" placeholder="Enter the ID number shown on the document">
+            </label>
+          </div>
+
+          <div class="kyc-upload-grid">
+            <label class="upload-dropzone" for="kycDocumentFile">
+              <span class="upload-dropzone-title">Government-issued ID</span>
+              <span class="upload-dropzone-copy">PDF, PNG, or JPG. Maximum size: 5MB</span>
+              <input type="file" id="kycDocumentFile" accept=".jpg,.jpeg,.png,.pdf,application/pdf,image/png,image/jpeg">
+            </label>
+
+            <label class="upload-dropzone" for="kycSelfieFile">
+              <span class="upload-dropzone-title">Face verification selfie</span>
+              <span class="upload-dropzone-copy">PNG or JPG only. Make sure the face is clear.</span>
+              <input type="file" id="kycSelfieFile" accept=".jpg,.jpeg,.png,image/png,image/jpeg">
+            </label>
+          </div>
+
+          <div class="kyc-preview-grid">
+            <div class="kyc-preview-card" id="documentPreviewCard">
+              <div class="panel-heading-row compact-row">
+                <h4>ID Preview</h4>
+              </div>
+              <div id="documentPreviewContent" class="kyc-preview-empty">Upload a government-issued ID to preview it here.</div>
+            </div>
+            <div class="kyc-preview-card" id="selfiePreviewCard">
+              <div class="panel-heading-row compact-row">
+                <h4>Selfie Preview</h4>
+              </div>
+              <div id="selfiePreviewContent" class="kyc-preview-empty">Upload a live selfie to preview it here.</div>
+            </div>
+          </div>
+
+          <div class="upload-actions-row">
+            <p id="selectedKycFiles" class="status-message"></p>
+            <button id="kycUploadButton" onclick="uploadKYC()" class="btn">Submit KYC Package</button>
+          </div>
+
+          <p id="kycStatus" class="status-message"></p>
+
+          <div class="history-block">
+            <div class="panel-heading-row compact-row">
+              <h4>Verification Timeline</h4>
+            </div>
+            <ul id="kycHistory" class="activity-list"></ul>
+          </div>
+        </section>
+      </section>
+
+      <section class="dashboard-grid">
+        <section class="dashboard-panel referral-panel">
+          <div class="panel-heading-row">
+            <div>
+              <p class="dashboard-kicker">Referral</p>
+              <h3>Your Invite Link</h3>
+            </div>
+            <button type="button" class="btn btn-secondary btn-small" onclick="copyReferralLink()">Copy Link</button>
+          </div>
+          <p class="panel-copy">Share your link and bring more participants into the campaign.</p>
+          <div class="referral-box">
+            <p id="referralLink">Loading...</p>
+          </div>
+        </section>
+
+        <section id="participants" class="dashboard-panel participants-panel">
+          <div class="panel-heading-row">
+            <div>
+              <p class="dashboard-kicker">Leaderboard & Referral Stats</p>
+              <h3>Top Participants</h3>
+            </div>
+            <button onclick="loadParticipants()" class="btn btn-secondary btn-small">Load Participants</button>
+          </div>
+          <div class="leaderboard-stats-row">
+            <div class="mini-stat-card">
+              <span>Total participants</span>
+              <strong id="totalParticipantsValue">0</strong>
+            </div>
+            <div class="mini-stat-card">
+              <span>Your rank</span>
+              <strong id="yourRankValue">-</strong>
+            </div>
+            <div class="mini-stat-card">
+              <span>Referral bonus</span>
+              <strong id="referralBonusValue">0 bonus entries</strong>
+            </div>
+          </div>
+          <p class="panel-copy">See who is active in the giveaway and how many entries they hold.</p>
+          <ul id="participantsList" class="participants-grid"></ul>
+        </section>
+      </section>
+
+      <section class="dashboard-grid transparency-grid">
+        <section id="fairness" class="dashboard-panel fairness-panel">
+          <div class="panel-heading-row">
+            <div>
+              <p class="dashboard-kicker">Fairness Proof</p>
+              <h3>Transparency Checks</h3>
+            </div>
+          </div>
+          <div class="proof-grid">
+            <article class="proof-card">
+              <strong>Randomization Method</strong>
+              <p id="fairnessMethodText">Loading fairness method...</p>
+            </article>
+            <article class="proof-card">
+              <strong>Payout Verification</strong>
+              <p id="fairnessPayoutText">Confirmed payouts can expose explorer links whenever a blockchain tx id is recorded.</p>
+            </article>
+            <article class="proof-card">
+              <strong>Latest Draw Proof</strong>
+              <p id="fairnessLatestDrawText">Waiting for recorded draw data.</p>
+            </article>
+          </div>
+          <ul id="fairnessProofList" class="notice-list"></ul>
+        </section>
+
+        <section class="dashboard-panel gamification-panel">
+          <div class="panel-heading-row">
+            <div>
+              <p class="dashboard-kicker">Gamification</p>
+              <h3>Badges & Streaks</h3>
+            </div>
+          </div>
+          <div class="leaderboard-stats-row">
+            <div class="mini-stat-card">
+              <span>Current streak</span>
+              <strong id="streakValue">0 days</strong>
+            </div>
+            <div class="mini-stat-card">
+              <span>Member level</span>
+              <strong id="levelValue">Starter</strong>
+            </div>
+          </div>
+          <ul id="badgeList" class="badge-list"></ul>
+        </section>
+      </section>
+
+      <section id="support" class="dashboard-panel support-panel">
+        <div class="panel-heading-row">
+          <div>
+            <p class="dashboard-kicker">Support & FAQ</p>
+            <h3>Need Help?</h3>
+          </div>
+        </div>
+        <p class="panel-copy">Submit account, payout, or KYC issues inside Cassinix so every request is tracked and reviewed by an authorized admin.</p>
+        <div class="support-ticket-grid">
+          <div class="support-ticket-card">
+            <div class="panel-heading-row compact-row">
+              <h4>Open Support Ticket</h4>
+            </div>
+            <label class="kyc-field">
+              <span>Subject</span>
+              <input type="text" id="supportSubject" placeholder="Example: Payout eligibility review">
+            </label>
+            <label class="kyc-field">
+              <span>Category</span>
+              <select id="supportCategory">
+                <option value="general">General</option>
+                <option value="account">Account</option>
+                <option value="payout">Payout</option>
+                <option value="kyc">KYC</option>
+              </select>
+            </label>
+            <label class="kyc-field">
+              <span>Message</span>
+              <textarea id="supportMessage" class="support-textarea" placeholder="Describe the issue with enough detail for manual review."></textarea>
+            </label>
+            <div class="upload-actions-row">
+              <p id="supportStatus" class="status-message"></p>
+              <button type="button" class="btn" id="supportSubmitButton" onclick="submitSupportTicket()">Submit Ticket</button>
+            </div>
+          </div>
+
+          <div class="support-ticket-card">
+            <div class="panel-heading-row compact-row">
+              <h4>Your Support History</h4>
+            </div>
+            <ul id="supportTicketList" class="notice-list"></ul>
+          </div>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>How do I claim rewards?</summary>
+            <p>Complete entries, keep your wallet verified, and watch the reward ledger for distribution events.</p>
+          </details>
+          <details>
+            <summary>Why is my payout pending?</summary>
+            <p>Pending rewards remain queued until the next distribution cycle and final verification checks complete.</p>
+          </details>
+          <details>
+            <summary>What if my wallet is not linked?</summary>
+            <p>Use the wallet verification action in the giveaway panel so payouts can be mapped to a destination address.</p>
+          </details>
+          <details>
+            <summary>How do referrals increase my chances?</summary>
+            <p>Referral activity can add bonus entries, improve your leaderboard position, and unlock badge progress.</p>
+          </details>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const API = window.location.protocol === "file:" ? "http://localhost:5000" : window.location.origin;
+    const token = localStorage.getItem("token");
+    const ENTRY_GOAL = 10;
+    let currentUser = null;
+    let participantsData = [];
+    let latestKycStatus = "No submission yet";
+    let countdownTimer = null;
+    let rewardSummary = null;
+    let transactionHistory = [];
+    const MAX_KYC_FILE_SIZE = 5 * 1024 * 1024;
+    const KYC_REFRESH_INTERVAL_MS = 10000;
+    const ALLOWED_KYC_MIME_TYPES = ["image/jpeg", "image/png", "application/pdf"];
+    const ALLOWED_SELFIE_MIME_TYPES = ["image/jpeg", "image/png"];
+    const kycDocumentFileInput = document.getElementById("kycDocumentFile");
+    const kycSelfieFileInput = document.getElementById("kycSelfieFile");
+    const kycIdTypeInput = document.getElementById("kycIdType");
+    const kycIdNumberInput = document.getElementById("kycIdNumber");
+    const walletAddressInput = document.getElementById("walletAddressInput");
+    const kycUploadButton = document.getElementById("kycUploadButton");
+    const kycStatus = document.getElementById("kycStatus");
+    const kycStatusBadge = document.getElementById("kycStatusBadge");
+    const selectedKycFiles = document.getElementById("selectedKycFiles");
+    const documentPreviewContent = document.getElementById("documentPreviewContent");
+    const selfiePreviewContent = document.getElementById("selfiePreviewContent");
+    const kycHistory = document.getElementById("kycHistory");
+    const participantsList = document.getElementById("participantsList");
+    const transactionList = document.getElementById("transactionList");
+    const notificationList = document.getElementById("notificationList");
+    const dashboardToast = document.getElementById("dashboardToast");
+    const fairnessProofList = document.getElementById("fairnessProofList");
+    const supportSubjectInput = document.getElementById("supportSubject");
+    const supportCategoryInput = document.getElementById("supportCategory");
+    const supportMessageInput = document.getElementById("supportMessage");
+    const supportStatus = document.getElementById("supportStatus");
+    const supportSubmitButton = document.getElementById("supportSubmitButton");
+    const supportTicketList = document.getElementById("supportTicketList");
+    let documentPreviewUrl = null;
+    let selfiePreviewUrl = null;
+    let kycRefreshTimer = null;
+
+    if (!token) {
+      window.location.href = "login.html";
+    } else {
+      loadUser();
+    }
+
+    function updateSelectedKycFilesMessage() {
+      const documentFile = kycDocumentFileInput.files[0];
+      const selfieFile = kycSelfieFileInput.files[0];
+
+      if (!documentFile && !selfieFile) {
+        selectedKycFiles.innerText = "";
+        selectedKycFiles.className = "status-message";
+        return;
+      }
+
+      const parts = [];
+      if (documentFile) {
+        parts.push(`ID: ${documentFile.name}`);
+      }
+      if (selfieFile) {
+        parts.push(`Selfie: ${selfieFile.name}`);
+      }
+
+      selectedKycFiles.innerText = parts.join(" | ");
+      selectedKycFiles.className = "status-message success";
+    }
+
+    function resetPreview(element, message) {
+      element.innerHTML = `<div class="kyc-preview-empty">${message}</div>`;
+    }
+
+    function revokePreviewUrl(previewUrl) {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    }
+
+    function renderDocumentPreview(file) {
+      revokePreviewUrl(documentPreviewUrl);
+      documentPreviewUrl = null;
+
+      if (!file) {
+        resetPreview(documentPreviewContent, "Upload a government-issued ID to preview it here.");
+        return;
+      }
+
+      documentPreviewUrl = URL.createObjectURL(file);
+
+      if (file.type === "application/pdf") {
+        documentPreviewContent.innerHTML = `
+          <iframe class="kyc-preview-frame" src="${documentPreviewUrl}" title="Government ID preview"></iframe>
+          <p class="kyc-preview-caption">PDF preview for ${file.name}</p>
+        `;
+        return;
+      }
+
+      documentPreviewContent.innerHTML = `
+        <img class="kyc-preview-image" src="${documentPreviewUrl}" alt="Government ID preview">
+        <p class="kyc-preview-caption">Image preview for ${file.name}</p>
+      `;
+    }
+
+    function renderSelfiePreview(file) {
+      revokePreviewUrl(selfiePreviewUrl);
+      selfiePreviewUrl = null;
+
+      if (!file) {
+        resetPreview(selfiePreviewContent, "Upload a live selfie to preview it here.");
+        return;
+      }
+
+      selfiePreviewUrl = URL.createObjectURL(file);
+      selfiePreviewContent.innerHTML = `
+        <img class="kyc-preview-image" src="${selfiePreviewUrl}" alt="Selfie preview">
+        <p class="kyc-preview-caption">Selfie preview for ${file.name}</p>
+      `;
+    }
+
+    function validateSelectedKycFile(file, allowedMimeTypes, label) {
+      if (!file) {
+        return true;
+      }
+
+      if (!file) {
+        return true;
+      }
+
+      if (!allowedMimeTypes.includes(file.type)) {
+        selectedKycFiles.innerText = label;
+        selectedKycFiles.className = "status-message error";
+        return false;
+      }
+
+      if (file.size > MAX_KYC_FILE_SIZE) {
+        selectedKycFiles.innerText = "Each file must be 5MB or smaller.";
+        selectedKycFiles.className = "status-message error";
+        return false;
+      }
+
+      return true;
+    }
+
+    kycDocumentFileInput.addEventListener("change", () => {
+      const file = kycDocumentFileInput.files[0];
+
+      if (!validateSelectedKycFile(file, ALLOWED_KYC_MIME_TYPES, "Government ID must be a PDF, PNG, or JPG.")) {
+        kycDocumentFileInput.value = "";
+        renderDocumentPreview(null);
+        return;
+      }
+
+      renderDocumentPreview(file);
+      updateSelectedKycFilesMessage();
+    });
+
+    kycSelfieFileInput.addEventListener("change", () => {
+      const file = kycSelfieFileInput.files[0];
+
+      if (!validateSelectedKycFile(file, ALLOWED_SELFIE_MIME_TYPES, "Selfie verification must be a PNG or JPG.")) {
+        kycSelfieFileInput.value = "";
+        renderSelfiePreview(null);
+        return;
+      }
+
+      renderSelfiePreview(file);
+      updateSelectedKycFilesMessage();
+    });
+
+    async function apiFetch(path, options = {}) {
+      const headers = {
+        ...(options.headers || {}),
+        Authorization: "Bearer " + token
+      };
+
+      const response = await fetch(API + path, {
+        ...options,
+        headers
+      });
+
+      let data = null;
+      try {
+        data = await response.json();
+      } catch (error) {
+        data = null;
+      }
+
+      if (!response.ok) {
+        throw new Error(data && (data.message || data.error) ? data.message || data.error : "Request failed");
+      }
+
+      return data;
+    }
+
+    function setDashboardToast(message, isError = false) {
+      dashboardToast.innerText = message;
+      dashboardToast.className = isError ? "status-message dashboard-toast error" : "status-message dashboard-toast success";
+    }
+
+    function clearDashboardToast() {
+      dashboardToast.innerText = "";
+      dashboardToast.className = "status-message dashboard-toast";
+    }
+
+    function getDisplayEntries() {
+      return rewardSummary ? rewardSummary.displayEntries : (currentUser ? currentUser.entries : 0);
+    }
+
+    function formatBtc(value) {
+      return Number(value || 0).toFixed(6) + " BTC";
+    }
+
+    function renderProfile() {
+      document.getElementById("profileUsername").innerText = currentUser.name;
+      document.getElementById("profileEmail").innerText = currentUser.email;
+      document.getElementById("profileWallet").innerText = rewardSummary && rewardSummary.walletAddress ? rewardSummary.walletAddress : "Not linked yet";
+      document.getElementById("profileAccess").innerText = currentUser.role;
+      document.getElementById("profileSignInMethod").innerText = rewardSummary && rewardSummary.walletAddress
+        ? "Email + wallet linked"
+        : "Email login";
+      document.getElementById("profileSecurityBadge").className = "status-pill " + (rewardSummary && rewardSummary.walletAddress ? "success" : "neutral");
+      document.getElementById("profileSecurityBadge").innerText = rewardSummary && rewardSummary.walletAddress ? "Wallet verified" : "Secure session";
+    }
+
+    function renderOverview() {
+      const displayEntries = getDisplayEntries();
+      document.getElementById("entriesValue").innerText = displayEntries;
+      document.getElementById("giveawayEntriesValue").innerText = displayEntries + (displayEntries === 1 ? " ticket" : " tickets");
+      document.getElementById("entrySummary").innerText = displayEntries === 1
+        ? "You currently hold 1 active giveaway entry."
+        : "You currently hold " + displayEntries + " active giveaway entries.";
+      document.getElementById("entryGoalValue").innerText = displayEntries + " out of " + ENTRY_GOAL + " entries earned";
+
+      const progress = Math.min((displayEntries / ENTRY_GOAL) * 100, 100);
+      document.getElementById("entryProgressBar").style.width = progress + "%";
+      document.getElementById("progressText").innerText = Math.round(progress) + "% milestone progress";
+
+      if (displayEntries >= ENTRY_GOAL) {
+        document.getElementById("milestoneStatus").innerText = "Milestone reached";
+        document.getElementById("milestoneHint").innerText = "You have maxed out the current eligibility target.";
+      } else if (displayEntries >= ENTRY_GOAL / 2) {
+        document.getElementById("milestoneStatus").innerText = "On track";
+        document.getElementById("milestoneHint").innerText = "You are building solid momentum toward the next draw.";
+      } else {
+        document.getElementById("milestoneStatus").innerText = "Needs momentum";
+        document.getElementById("milestoneHint").innerText = "Complete actions below to reach the next milestone faster.";
+      }
+    }
+
+    function renderRewardLedger() {
+      document.getElementById("balanceValue").innerText = formatBtc(rewardSummary ? rewardSummary.confirmedBalance : 0);
+      document.getElementById("pendingRewardValue").innerText = formatBtc(rewardSummary ? rewardSummary.pendingRewards : 0);
+      document.getElementById("transactionCountValue").innerText = rewardSummary ? rewardSummary.transactionCount : 0;
+
+      transactionList.innerHTML = "";
+
+      if (transactionHistory.length === 0) {
+        transactionList.innerHTML = '<li class="empty-state-card">No Bitcoin distributions recorded yet. Reward events will appear here with transaction IDs once payouts are broadcast.</li>';
+        return;
+      }
+
+      transactionHistory.forEach((item) => {
+        const li = document.createElement("li");
+        li.className = "transaction-item";
+        const createdAt = item.createdAt ? new Date(item.createdAt).toLocaleString() : "Unknown time";
+        li.innerHTML = `
+          <div>
+            <strong>${item.type}</strong>
+            <p>${item.userName || "Unknown user"}${item.userEmail ? ` | ${item.userEmail}` : ""}</p>
+            <p>${createdAt}</p>
+            <p>${item.note || "Reward activity recorded."}</p>
+          </div>
+          <div class="transaction-meta">
+            <span class="status-pill ${item.status === "confirmed" ? "success" : "warning"}">${item.status}</span>
+            <strong>${formatBtc(item.amount)}</strong>
+            ${item.explorerUrl
+              ? `<a href="${item.explorerUrl}" target="_blank" rel="noreferrer">View payout on explorer</a>`
+              : `<code>${item.txId || (item.walletAddress ? `Wallet ${item.walletAddress}` : "Awaiting wallet + blockchain tx id")}</code>`}
+          </div>
+        `;
+        transactionList.appendChild(li);
+      });
+    }
+
+    function renderNotifications() {
+      const notices = [];
+      const displayEntries = getDisplayEntries();
+      const pendingTransactions = transactionHistory.filter((item) => item.status !== "confirmed").length;
+
+      if (!(rewardSummary && rewardSummary.walletAddress)) {
+        notices.push({ label: "Wallet action needed", detail: "Verify a payout wallet so reward distributions have a destination address." });
+      }
+
+      if (latestKycStatus.toLowerCase() !== "approved") {
+        notices.push({ label: "Verification pending", detail: "Complete or finish KYC approval to strengthen payout eligibility." });
+      }
+
+      if (displayEntries < ENTRY_GOAL) {
+        notices.push({ label: "Milestone reminder", detail: "You need " + (ENTRY_GOAL - displayEntries) + " more entries to complete the current milestone." });
+      }
+
+      if (pendingTransactions > 0) {
+        notices.push({ label: "Reward processing", detail: pendingTransactions + " reward event(s) are waiting for the next distribution cycle." });
+      }
+
+      if (notices.length === 0) {
+        notices.push({ label: "All clear", detail: "Your dashboard is up to date. Watch for new giveaway opportunities." });
+      }
+
+      document.getElementById("notificationCount").innerText = notices.length + (notices.length === 1 ? " alert" : " alerts");
+      notificationList.innerHTML = "";
+
+      notices.forEach((notice) => {
+        const li = document.createElement("li");
+        li.className = "notice-item";
+        li.innerHTML = `
+          <strong>${notice.label}</strong>
+          <p>${notice.detail}</p>
+        `;
+        notificationList.appendChild(li);
+      });
+    }
+
+    function renderGamification() {
+      const displayEntries = getDisplayEntries();
+      const level = displayEntries >= 10 ? "Gold" : displayEntries >= 5 ? "Silver" : "Starter";
+      const badges = ["Consistent participant"];
+
+      if (rewardSummary && rewardSummary.streakCount >= 2) {
+        badges.push("Daily streak");
+      }
+
+      if (latestKycStatus.toLowerCase() === "approved") {
+        badges.push("Verified member");
+      }
+
+      if (rewardSummary && rewardSummary.bonusEntries >= 2) {
+        badges.push("Task finisher");
+      }
+
+      const streakCount = rewardSummary ? rewardSummary.streakCount : 0;
+      document.getElementById("streakValue").innerText = streakCount + (streakCount === 1 ? " day" : " days");
+      document.getElementById("levelValue").innerText = level;
+
+      const badgeList = document.getElementById("badgeList");
+      badgeList.innerHTML = "";
+      badges.forEach((badge) => {
+        const li = document.createElement("li");
+        li.className = "badge-chip";
+        li.innerText = badge;
+        badgeList.appendChild(li);
+      });
+    }
+
+    function renderLeaderboardSummary() {
+      document.getElementById("totalParticipantsValue").innerText = participantsData.length;
+      const sorted = [...participantsData].sort((left, right) => right.entries - left.entries);
+      const rank = sorted.findIndex((user) => currentUser && user._id === currentUser._id);
+      document.getElementById("yourRankValue").innerText = rank === -1 ? "-" : "#" + (rank + 1);
+      const bonusEntries = rewardSummary ? rewardSummary.bonusEntries : 0;
+      document.getElementById("referralBonusValue").innerText = bonusEntries + (bonusEntries === 1 ? " bonus entry" : " bonus entries");
+    }
+
+    async function loadRewardData() {
+      rewardSummary = await apiFetch("/rewards/summary");
+      transactionHistory = await apiFetch("/transactions");
+      renderProfile();
+      renderOverview();
+      renderRewardLedger();
+      renderNotifications();
+      renderGamification();
+      renderLeaderboardSummary();
+    }
+
+    function renderSupportTickets(tickets) {
+      supportTicketList.innerHTML = "";
+
+      if (!tickets.length) {
+        supportTicketList.innerHTML = '<li class="empty-state-card">No support tickets yet. Submit one here if you need an admin-reviewed response.</li>';
+        return;
+      }
+
+      tickets.forEach((ticket) => {
+        const li = document.createElement("li");
+        li.className = "notice-item support-ticket-item";
+        li.innerHTML = `
+          <strong>${ticket.subject}</strong>
+          <p>${ticket.category} | ${new Date(ticket.createdAt).toLocaleString()}</p>
+          <p>${ticket.message}</p>
+          <p><span class="status-pill ${ticket.status === "resolved" ? "success" : ticket.status === "in-review" ? "warning" : "neutral"}">${ticket.status}</span></p>
+          ${ticket.adminResponse ? `<p><strong>Admin response:</strong> ${ticket.adminResponse}</p>` : ""}
+          ${ticket.respondedByName ? `<p>Reviewed by ${ticket.respondedByName}${ticket.respondedAt ? ` on ${new Date(ticket.respondedAt).toLocaleString()}` : ""}</p>` : ""}
+        `;
+        supportTicketList.appendChild(li);
+      });
+    }
+
+    async function loadSupportTickets() {
+      try {
+        const tickets = await apiFetch("/support/tickets/me");
+        renderSupportTickets(Array.isArray(tickets) ? tickets : []);
+      } catch (error) {
+        supportTicketList.innerHTML = '<li class="empty-state-card">Failed to load support tickets.</li>';
+      }
+    }
+
+    async function submitSupportTicket() {
+      const subject = supportSubjectInput.value.trim();
+      const category = supportCategoryInput.value;
+      const message = supportMessageInput.value.trim();
+
+      if (!subject || subject.length < 5) {
+        supportStatus.innerText = "Use a support subject with at least 5 characters.";
+        supportStatus.className = "status-message error";
+        return;
+      }
+
+      if (!message || message.length < 20) {
+        supportStatus.innerText = "Describe the issue in at least 20 characters so admins can review it properly.";
+        supportStatus.className = "status-message error";
+        return;
+      }
+
+      supportSubmitButton.disabled = true;
+      supportStatus.innerText = "Submitting support ticket...";
+      supportStatus.className = "status-message success";
+
+      try {
+        await apiFetch("/support/tickets", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ subject, category, message })
+        });
+
+        supportSubjectInput.value = "";
+        supportCategoryInput.value = "general";
+        supportMessageInput.value = "";
+        supportStatus.innerText = "Support ticket submitted. An admin will review it inside Cassinix.";
+        supportStatus.className = "status-message success";
+        await loadSupportTickets();
+      } catch (error) {
+        supportStatus.innerText = error.message;
+        supportStatus.className = "status-message error";
+      } finally {
+        supportSubmitButton.disabled = false;
+      }
+    }
+
+    async function loadFairnessProof() {
+      try {
+        const data = await fetch(API + "/fairness/proof");
+        const proof = await data.json();
+
+        if (!data.ok) {
+          throw new Error(proof.message || "Failed to load fairness proof");
+        }
+
+        document.getElementById("fairnessMethodText").innerText = proof.method || "Weighted random selection by total entries";
+        const latestDraw = Array.isArray(proof.latestDraws) && proof.latestDraws.length > 0 ? proof.latestDraws[0] : null;
+        document.getElementById("fairnessLatestDrawText").innerText = latestDraw
+          ? `Latest winner: ${latestDraw.winnerName} | proof ${latestDraw.proofHash.slice(0, 12)}...`
+          : "No recorded draw proof yet. Use the admin winner action to create the first proof record.";
+        fairnessProofList.innerHTML = "";
+
+        (proof.latestDraws || []).forEach((draw) => {
+          const li = document.createElement("li");
+          li.className = "notice-item";
+          li.innerHTML = `
+            <strong>${draw.winnerName}</strong>
+            <p>${new Date(draw.createdAt).toLocaleString()} | pool size ${draw.poolSize} | proof ${draw.proofHash}</p>
+          `;
+          fairnessProofList.appendChild(li);
+        });
+
+        if (!proof.latestDraws || proof.latestDraws.length === 0) {
+          fairnessProofList.innerHTML = '<li class="empty-state-card">No fairness proof records yet.</li>';
+        }
+      } catch (error) {
+        document.getElementById("fairnessMethodText").innerText = "Unable to load fairness method.";
+        document.getElementById("fairnessLatestDrawText").innerText = "Fairness proof is temporarily unavailable.";
+        fairnessProofList.innerHTML = '<li class="empty-state-card">Failed to load fairness proof data.</li>';
+      }
+    }
+
+    function startCountdown() {
+      const updateCountdown = () => {
+        const now = new Date();
+        const nextDraw = new Date(now);
+        nextDraw.setHours(24, 0, 0, 0);
+        const diff = Math.max(nextDraw.getTime() - now.getTime(), 0);
+        const hours = String(Math.floor(diff / 3600000)).padStart(2, "0");
+        const minutes = String(Math.floor((diff % 3600000) / 60000)).padStart(2, "0");
+        const seconds = String(Math.floor((diff % 60000) / 1000)).padStart(2, "0");
+        document.getElementById("countdownTimer").innerText = `${hours}:${minutes}:${seconds}`;
+      };
+
+      if (countdownTimer) {
+        clearInterval(countdownTimer);
+      }
+
+      updateCountdown();
+      countdownTimer = setInterval(updateCountdown, 1000);
+    }
+
+    async function loadUser() {
+      try {
+        const res = await fetch(API + "/me", {
+          headers: {
+            Authorization: "Bearer " + token
+          }
+        });
+
+        if (!res.ok) {
+          throw new Error("Unauthorized");
+        }
+
+        currentUser = await res.json();
+
+        document.getElementById("heroGreeting").innerText = "Welcome back, " + currentUser.name;
+        document.getElementById("userInfo").innerText =
+          "Tier " + currentUser.tier + " member with " + currentUser.entries + " active entries.";
+
+        document.getElementById("tierValue").innerText = currentUser.tier.toUpperCase();
+        document.getElementById("sidebarTier").innerText = currentUser.tier.toUpperCase();
+        document.getElementById("sidebarRole").innerText = "Role: " + currentUser.role;
+        document.getElementById("entriesValue").innerText = currentUser.entries;
+        document.getElementById("entrySummary").innerText = currentUser.entries === 1
+          ? "You currently hold 1 active giveaway entry."
+          : "You currently hold " + currentUser.entries + " active giveaway entries.";
+        document.getElementById("profileEmail").innerText = currentUser.email;
+
+        document.getElementById("referralLink").innerText =
+          currentUser.referralCode
+            ? new URL("register.html?ref=" + currentUser.referralCode, window.location.href).href
+            : "No referral code available yet.";
+
+        await loadRewardData();
+        loadFairnessProof();
+        startCountdown();
+        loadParticipants();
+        loadKycHistory();
+        loadSupportTickets();
+        startKycAutoRefresh();
+      } catch (error) {
+        alert("Session expired. Please login again.");
+        logout();
+      }
+    }
+
+    function startKycAutoRefresh() {
+      if (kycRefreshTimer) {
+        return;
+      }
+
+      kycRefreshTimer = setInterval(() => {
+        void loadKycHistory();
+      }, KYC_REFRESH_INTERVAL_MS);
+    }
+
+    async function loadParticipants() {
+      try {
+        const res = await fetch(API + "/participants");
+        const users = await res.json();
+        participantsData = Array.isArray(users) ? users : [];
+        participantsList.innerHTML = "";
+
+        [...participantsData].sort((left, right) => right.entries - left.entries).forEach((user) => {
+          const li = document.createElement("li");
+          li.className = "participant-card";
+          li.innerHTML = `
+            <span class="participant-rank">${user.entries}</span>
+            <div>
+              <strong>${user.name}</strong>
+              <p>${user.entries === 1 ? "1 entry" : `${user.entries} entries`}</p>
+            </div>
+          `;
+          participantsList.appendChild(li);
+        });
+
+        renderLeaderboardSummary();
+      } catch (error) {
+        participantsList.innerHTML = '<li class="empty-state-card">Failed to load participants.</li>';
+        document.getElementById("totalParticipantsValue").innerText = "0";
+        document.getElementById("yourRankValue").innerText = "-";
+      }
+    }
+
+    function updateKycHeadline(status, hint) {
+      latestKycStatus = status;
+      document.getElementById("kycHeadlineStatus").innerText = status;
+      document.getElementById("kycHeadlineHint").innerText = hint;
+      kycStatusBadge.innerText = status;
+      kycStatusBadge.className = "status-pill " + (
+        status.toLowerCase() === "approved"
+          ? "success"
+          : status.toLowerCase() === "rejected"
+            ? "error"
+          : status.toLowerCase() === "pending"
+            ? "warning"
+            : "neutral"
+      );
+    }
+
+    async function loadKycHistory() {
+      try {
+        const res = await fetch(API + "/kyc/me", {
+          headers: {
+            Authorization: "Bearer " + token
+          }
+        });
+        const records = await res.json();
+
+        kycHistory.innerHTML = "";
+
+        if (!res.ok) {
+          throw new Error(records.message || "Failed to load your KYC records.");
+        }
+
+        if (records.length === 0) {
+          kycHistory.innerHTML = '<li class="empty-state-card">No KYC uploads yet.</li>';
+          updateKycHeadline("No submission yet", "Upload a file to start verification.");
+          if (!kycUploadButton.disabled) {
+            kycStatus.innerText = "No KYC submission yet.";
+            kycStatus.className = "status-message";
+          }
+          renderNotifications();
+          renderGamification();
+          return;
+        }
+
+        if (!kycUploadButton.disabled) {
+          kycStatus.innerText = "Latest KYC status: " + records[0].status;
+          kycStatus.className = records[0].status === "approved"
+            ? "status-message success"
+            : records[0].status === "rejected"
+              ? "status-message error"
+            : "status-message";
+        }
+
+        updateKycHeadline(
+          records[0].status,
+          records[0].status === "approved"
+            ? "Your verification has been approved."
+            : records[0].status === "rejected"
+              ? `Rejected: ${records[0].rejectionReason || "Please submit clearer documents and a matching face photo."}`
+              : "Your latest verification is still under review."
+        );
+        renderNotifications();
+        renderGamification();
+
+        records.forEach((record) => {
+          const li = document.createElement("li");
+          li.className = "activity-item";
+          const createdAt = record.createdAt
+            ? new Date(record.createdAt).toLocaleString()
+            : "Unknown date";
+          li.innerHTML = `
+            <div>
+              <strong>${record.status}</strong>
+              <p>${createdAt}</p>
+              <p>${record.idType || "Government ID"} ${record.idNumberMasked || ""}</p>
+              <p>${record.documentOriginalChecked && record.faceMatchedChecked
+                ? `Reviewed by ${record.reviewedByName || "admin"}`
+                : record.status === "rejected"
+                  ? `Rejected: ${record.rejectionReason || "Reason not provided."}`
+                  : "Awaiting admin original-ID and face-match review."}</p>
+            </div>
+            <span class="status-pill ${record.status === "approved" ? "success" : record.status === "rejected" ? "error" : "warning"}">${record.status}</span>
+          `;
+          kycHistory.appendChild(li);
+        });
+      } catch (error) {
+        updateKycHeadline("Unavailable", "Your KYC status could not be loaded.");
+        kycHistory.innerHTML = '<li class="empty-state-card">Failed to load your KYC history.</li>';
+        renderNotifications();
+      }
+    }
+
+    async function uploadKYC() {
+      const documentFile = kycDocumentFileInput.files[0];
+      const selfieFile = kycSelfieFileInput.files[0];
+      const idType = kycIdTypeInput.value;
+      const idNumber = kycIdNumberInput.value.trim();
+
+      if (!idType || !idNumber) {
+        kycStatus.innerText = "Select an ID type and enter the ID number first.";
+        kycStatus.className = "status-message error";
+        return;
+      }
+
+      if (!/^[a-zA-Z0-9-]{6,30}$/.test(idNumber)) {
+        kycStatus.innerText = "Use a valid ID number format with 6-30 letters, numbers, or dashes.";
+        kycStatus.className = "status-message error";
+        return;
+      }
+
+      if (!documentFile || !selfieFile) {
+        kycStatus.innerText = "Upload both the government ID and the face selfie.";
+        kycStatus.className = "status-message error";
+        return;
+      }
+
+      if (!currentUser) {
+        kycStatus.innerText = "User data is still loading.";
+        kycStatus.className = "status-message error";
+        return;
+      }
+
+      if (!validateSelectedKycFile(documentFile, ALLOWED_KYC_MIME_TYPES, "Government ID must be a PDF, PNG, or JPG.")) {
+        kycStatus.innerText = "Government ID must be a PDF, PNG, or JPG.";
+        kycStatus.className = "status-message error";
+        return;
+      }
+
+      if (!validateSelectedKycFile(selfieFile, ALLOWED_SELFIE_MIME_TYPES, "Selfie verification must be a PNG or JPG.")) {
+        kycStatus.innerText = "Selfie verification must be a PNG or JPG.";
+        kycStatus.className = "status-message error";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("idType", idType);
+      formData.append("idNumber", idNumber);
+      formData.append("documentFile", documentFile);
+      formData.append("selfieFile", selfieFile);
+      kycUploadButton.disabled = true;
+      kycStatus.innerText = "Uploading government ID and face verification...";
+      kycStatus.className = "status-message success";
+
+      try {
+        const res = await fetch(API + "/kyc/upload", {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer " + token
+          },
+          body: formData
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.message || "Upload failed.");
+        }
+
+        kycStatus.innerText = data.message || "Upload completed.";
+        kycStatus.className = "status-message success";
+        updateKycHeadline("Pending", "Your ID originality and face-match review are pending.");
+        addTransaction("Verification submitted", BTC_REWARD_PER_ENTRY, "pending", "", "KYC verification was submitted and queued for reward review.");
+        kycDocumentFileInput.value = "";
+        kycSelfieFileInput.value = "";
+        kycIdTypeInput.value = "";
+        kycIdNumberInput.value = "";
+        renderDocumentPreview(null);
+        renderSelfiePreview(null);
+        selectedKycFiles.innerText = "";
+        selectedKycFiles.className = "status-message";
+        loadKycHistory();
+      } catch (error) {
+        kycStatus.innerText = error.message;
+        kycStatus.className = "status-message error";
+      } finally {
+        kycUploadButton.disabled = false;
+      }
+    }
+
+    renderDocumentPreview(null);
+    renderSelfiePreview(null);
+
+    async function copyReferralLink() {
+      clearDashboardToast();
+      const referralText = document.getElementById("referralLink").innerText;
+
+      if (!referralText || referralText === "Loading..." || referralText === "No referral code available yet.") {
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(referralText);
+        setDashboardToast("Referral link copied to clipboard.");
+      } catch (error) {
+        setDashboardToast("Unable to copy referral link.", true);
+      }
+    }
+
+    function claimDailyEntries() {
+      if (!currentUser) {
+        return;
+      }
+
+      apiFetch("/rewards/claim-daily", {
+        method: "POST"
+      }).then(async () => {
+        await loadRewardData();
+        loadParticipants();
+        setDashboardToast("Daily entry claimed. Your giveaway status has been updated.");
+      }).catch((error) => {
+        setDashboardToast(error.message, true);
+      });
+    }
+
+    function completeTasks() {
+      if (!currentUser) {
+        return;
+      }
+
+      apiFetch("/rewards/task-bonus", {
+        method: "POST"
+      }).then(async () => {
+        await loadRewardData();
+        loadParticipants();
+        setDashboardToast("Task bonus applied. Two bonus entries were added.");
+      }).catch((error) => {
+        setDashboardToast(error.message, true);
+      });
+    }
+
+    function verifyWalletForPayout() {
+      if (!currentUser) {
+        return;
+      }
+
+      if (rewardSummary && rewardSummary.walletAddress) {
+        setDashboardToast("Wallet already linked for payout routing.");
+        return;
+      }
+
+      const walletAddress = (walletAddressInput && walletAddressInput.value ? walletAddressInput.value : "").trim();
+
+      if (!walletAddress) {
+        setDashboardToast("Enter your real Bitcoin wallet address before linking it.", true);
+        return;
+      }
+
+      apiFetch("/wallet", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          walletAddress
+        })
+      }).then(async () => {
+        await loadRewardData();
+        if (walletAddressInput) {
+          walletAddressInput.value = "";
+        }
+        setDashboardToast("Wallet linked for payout routing.");
+      }).catch((error) => {
+        setDashboardToast(error.message, true);
+      });
+    }
+
+    function logout() {
+      if (kycRefreshTimer) {
+        clearInterval(kycRefreshTimer);
+        kycRefreshTimer = null;
+      }
+
+      if (countdownTimer) {
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+      }
+
+      localStorage.removeItem("token");
+      window.location.href = "login.html";
+    }
+
+  </script>
+</body>
+</html>
